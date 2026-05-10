@@ -20,11 +20,22 @@ A robust, secure, and scalable RESTful API built with Spring Boot for managing t
     - Restore soft-deleted tasks.
     - Permanently delete tasks from the database.
     - Global view of all users and tasks.
-- **Security**: 
-    - Password hashing using BCrypt.
-    - Ownership verification (Users can only see/edit their own tasks).
-- **Validation & Error Handling**: Comprehensive global exception handling with descriptive error messages.
-- **Audit Trails**: Automatic tracking of `createdAt` and `updatedAt` timestamps.
+- **Security**: Robust security configuration with CORS, CSRF protection, and JWT filters.
+
+## 🧠 Design Decisions & Assumptions
+
+### Design Decisions
+- **JPA Specifications**: Used for dynamic filtering and searching to avoid writing multiple repository methods for different filter combinations.
+- **Soft Delete Pattern**: Tasks are flagged as `deleted` rather than removed from the database immediately. This allows for an "Undo" or "Trash" feature, which is essential for professional task management.
+- **DTO Layer**: Implemented Data Transfer Objects (DTOs) and Mappers to decouple the API contract from the internal Database Schema, ensuring better maintainability and security.
+- **Global Exception Handling**: A centralized `@RestControllerAdvice` ensures consistent error responses (JSON format) across the entire application.
+- **Professional Logging**: Used SLF4J with `@Slf4j` for traceability, which is crucial for debugging production systems.
+
+### Assumptions
+- **Email Uniqueness**: Assumed that each user and administrator must have a unique email address for authentication.
+- **Task Ownership**: Assumed that a regular user should only be able to view, edit, or delete tasks they created.
+- **Admin Scope**: Assumed that administrators need a global view of all tasks (including deleted ones) and the ability to restore or permanently purge data.
+- **In-Memory Persistence**: For the purpose of this assessment, H2 is used for ease of review, but the architecture is ready for a seamless transition to PostgreSQL or MySQL.
 
 ## 🛠️ Technology Stack
 
@@ -89,3 +100,4 @@ mvn test
 ---
 
 *This project was developed as part of a technical hiring assessment and demonstrates backend engineering best practices using Spring Boot, JWT authentication, role-based access control, and RESTful API design.*
+
